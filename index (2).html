@@ -1249,9 +1249,84 @@
 </head>
 <body>
 
+<!-- 1. MÀN HÌNH ĐĂNG NHẬP -->
+<div id="login-section">
+  <div class="login-box">
+    <h1 style="font-size: 20px; line-height: 1.4; color: #922b21; margin-bottom: 10px;">WEBSITE HỌC TỪ VỰNG HSK 3.0 - ITSELENA.TRAN</h1>
+  
+    <p>Đăng nhập bằng Google để bắt đầu học và lưu tiến độ.</p>
+    <button id="login-btn">
+      Đăng nhập bằng Google
+    </button>
+  </div>
+</div>
 
+<!-- 2. MÀN HÌNH DASHBOARD (Chọn cấp độ) -->
+<div id="dashboard-section" style="display:none; max-width: 1000px; margin: 40px auto; padding: 0 16px;">
+  <h2 style="text-align:center; color: #922b21; margin-bottom: 25px; font-size: 24px; font-weight: bold;">DANH SÁCH CẤP ĐỘ HSK 3.0</h2>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
+    
+    <!-- HSK 1: Đã mở khóa -->
+    <div onclick="openHSK1()" style="background: #fff; border: 2px solid #27ae60; padding: 20px; border-radius: 12px; cursor: pointer; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      <span style="color: #27ae60; font-weight: bold; font-size: 14px;">✓ Đã mở khóa</span>
+      <h3 style="margin: 10px 0; color: #922b21; font-size: 22px;">HSK 1</h3>
+      <p style="color: #666; margin: 0; font-size: 14px;">Từ vựng 1 - 300</p>
+    </div>
 
-<div id="app-content">
+    <!-- HSK 2 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 2!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 2</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 301 - 500</p>
+    </div>
+
+    <!-- HSK 3 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 3!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 3</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 501 - 1,000</p>
+    </div>
+
+    <!-- HSK 4 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 4!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 4</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 1,001 - 2,000</p>
+    </div>
+
+    <!-- HSK 5 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 5!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 5</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 2,001 - 3,600</p>
+    </div>
+
+    <!-- HSK 6 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 6!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 6</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 3,601 - 5,400</p>
+    </div>
+
+    <!-- HSK 7 - 9 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 7-9!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 7 - 9</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 5,401 - 11,000</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- 3. MÀN HÌNH BÀI HỌC HSK1 -->
+<div id="app-content" style="display:none;">
+  
+  <div style="max-width: 1000px; margin: 15px auto 0; padding: 0 16px;">
+    <button onclick="backToDashboard()" style="padding: 8px 16px; background: #666; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+      ← Quay lại Dashboard
+    </button>
+  </div>
 
 <header>
   <h1>汉语水平考试 · 300 Từ vựng HSK 1</h1>
