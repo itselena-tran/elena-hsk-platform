@@ -4,12 +4,13 @@ import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/
 
 // Thay thế các thông tin bên dưới bằng firebaseConfig thu được ở Bước 2.1
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAVbnYruosyvlkHYwvmve59RjPLolvRVsg",
+  authDomain: "itselena-hsk.firebaseapp.com",
+  projectId: "itselena-hsk",
+  storageBucket: "itselena-hsk.firebasestorage.app",
+  messagingSenderId: "422292479641",
+  appId: "1:422292479641:web:4432c1710553959059a208",
+  measurementId: "G-PZGVDTWGFP"
 };
 
 // Initialize Firebase
