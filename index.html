@@ -1300,28 +1300,57 @@
 
 <!-- 2. MÀN HÌNH DASHBOARD (Chọn cấp độ) -->
 <div id="dashboard-section" style="display:none; max-width: 1000px; margin: 40px auto; padding: 0 16px;">
-  <h2 style="text-align:center; color: #922b21; margin-bottom: 25px; font-size: 24px;">DANH SÁCH CẤP ĐỘ HSK 3.0</h2>
+  <h2 style="text-align:center; color: #922b21; margin-bottom: 25px; font-size: 24px; font-weight: bold;">DANH SÁCH CẤP ĐỘ HSK 3.0</h2>
+  
   <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
     
-    <!-- Khóa HSK 1 được kích hoạt -->
+    <!-- HSK 1: Đã mở khóa -->
     <div onclick="openHSK1()" style="background: #fff; border: 2px solid #27ae60; padding: 20px; border-radius: 12px; cursor: pointer; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
       <span style="color: #27ae60; font-weight: bold; font-size: 14px;">✓ Đã mở khóa</span>
       <h3 style="margin: 10px 0; color: #922b21; font-size: 22px;">HSK 1</h3>
-      <p style="color: #666; margin: 0; font-size: 14px;">300 Từ vựng cơ bản</p>
+      <p style="color: #666; margin: 0; font-size: 14px;">Từ vựng 1 - 300</p>
     </div>
 
-    <!-- Khóa HSK 2 chưa kích hoạt -->
-    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 2!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.6;">
+    <!-- HSK 2 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 2!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
       <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
       <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 2</h3>
-      <p style="color: #888; margin: 0; font-size: 14px;">500 Từ vựng</p>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 301 - 500</p>
     </div>
 
-    <!-- Khóa HSK 3 - 9 chưa kích hoạt -->
-    <div onclick="alert('Tài khoản của bạn chưa đăng ký các cấp độ Cao Cấp!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.6;">
+    <!-- HSK 3 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 3!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
       <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
-      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK Cao Cấp</h3>
-      <p style="color: #888; margin: 0; font-size: 14px;">HSK 3 - HSK 9</p>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 3</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 501 - 1,000</p>
+    </div>
+
+    <!-- HSK 4 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 4!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 4</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 1,001 - 2,000</p>
+    </div>
+
+    <!-- HSK 5 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 5!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 5</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 2,001 - 3,600</p>
+    </div>
+
+    <!-- HSK 6 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 6!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 6</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 3,601 - 5,400</p>
+    </div>
+
+    <!-- HSK 7 - 9 -->
+    <div onclick="alert('Tài khoản của bạn chưa đăng ký cấp độ HSK 7-9!')" style="background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 12px; cursor: not-allowed; text-align: center; opacity: 0.65;">
+      <span style="color: #e74c3c; font-weight: bold; font-size: 14px;">🔒 Chưa đăng ký</span>
+      <h3 style="margin: 10px 0; color: #555; font-size: 22px;">HSK 7 - 9</h3>
+      <p style="color: #777; margin: 0; font-size: 14px;">Từ vựng 5,401 - 11,000</p>
     </div>
 
   </div>
@@ -1370,41 +1399,84 @@
 <!-- THƯ VIỆN & XỬ LÝ JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7/dist/hanzi-writer.min.js"></script>
 
+<!-- THƯ VIỆN & XỬ LÝ JAVASCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7/dist/hanzi-writer.min.js"></script>
+
 <script>
-  // Dữ liệu từ vựng Base64
-  const __APP_B64 = "Y29uc3QgREFUQSA9IFt7Im51bSI6IDEsICJoeiI6ICLniLEiLCAicHkiOiAiw6BpIiwgInBvcyI6ICLEkWciLCAibWVhbmluZyI6ICJ5w6p1LCB5w6p1IHRow61jaCIsICJjYXQiOiAiRFRVIiwgImV4YW1wbGVzIjogW1si5oiR54ix5oiR55qE5a625Lq644CCIiwgIlfHkiDDoGkgd8eSIGRlIGppxIFyw6luLiIsICJUw7RpIHnDqnUgZ2lhIMSRw6xuaCBj4bunYSB0w7RpLiJdLCBbIuWlueW+iOeIseeci+eUteW9seOAgiIsICJUxIEgaMSbbiDDoGkga8OgbiBkacOgbnnHkG5nLiIsICJDw7Qg4bqleSBy4bqldCB0aMOtY2ggeGVtIHBoaW0uIl0sIFsi54i454i454ix5Zad6Iy244CCIiwgIkLDoGJhIMOgaSBoxJMgY2jDoS4iLCAiQuG7kSB0aMOtY2ggdeG7kW5nIHRyw6AuIl1dLCAibGV0dGVyIjogIkEiLCAiZW1vIjogIuKdpO+4jyJ9LCB7Im51bSI6IDIsICJoeiI6ICLlkKciLCAicHkiOiAiYmEiLCAicG9zIjogInRy4bujIiwgIm1lYW5pbmciOiAiKHRy4bujIHThu6sgxJHhu4Egbmdo4buLL3Bo4buPbmcgxJFvw6FuKSIsICJjYXQiOiAiVFIiLCAiZXhhbXBsZXMiOiBbWyLmiJHku6zotbDlkKfjgIIiLCAiV8eSbWVuIHrHknUgYmEuIiwgIkNow7puZyB0YSDEkWkgdGjDtGkuIl0sIFsi5L2g5piv6ICB5biI5ZCn77yfIiwgIk7HkCBzaMOsIGzHjm9zaMSrIGJhPyIsICJBbmggbMOgIGdpw6FvIHZpw6puIHBo4bqjaSBraMO0bmc/Il0sIFsi5aW95ZCn77yM5oiR55+l6YGT5LqG44CCIiwgIkjHjm8gYmEsIHfHkiB6aMSrZMOgbyBsZS4iLCAixJDGsOG7o2MgdGjDtGksIHTDtGkgYmnhur90IHLhu5NpLiJdXSwgImxldHRlciI6ICJCIiwgImVtbyI6ICLwn5KsIn0sIHsibnVtIjogMywgImh6IjogIuWFqyIsICJweSI6ICJixIEiLCAicG9zIjogInPhu5EiLCAibWVhbmluZyI6ICJz4buRIHTDoW0iLCAiY2F0IjogIlNPIiwgImV4YW1wbGVzIjogW1si5oiR5a625pyJ5YWr5Y+j5Lq644CCIiwgIlfHkiqiacSBIHnHknUgYsSBIGvHknUgcsOpbi4iLCAiTmjDoCB0w7RpIGPDsyB0w6FtIG5nxrDhu51pLiJdLCBbIueOsOWcqOWFq+eCueS6huOAgiIsICJYacOgbnrDoGkgYsSBIGRpx45uIGxlLiIsICJCw6J5IGdp4budIGzDoCB0w6FtIGdp4budIHLhu5NpLiJdLCBbIueIuOeIuOW+iOWWnOasoueci+S5puOAgiIsICJCw6BiYSBoxJtuIHjHkGh1YW4ga8OgbnNoxasuIiwgIkLhu5EgcuG6pXQgdGjDrWNoIMSR4buNYyBzw6FjaC4iXV0sICJsZXR0ZXIiOiAiQiIsICJlbW8iOiAi8J+RqCJ9LCB7Im51bSI6IDQsICJoeiI6ICLnmb4iLCAicHkiOiAiYseOaSIsICJwb3MiOiAic+G7kSIsICJtZWFuaW5nIjogInRyxINtIiwgImNhdCI6ICJTTyIsICJleGFtcGxlcyI6IFtbIui/meacrOS5puS4gOeZvuWdl+mSseOAgiIsICJaaMOoIGLEm24gc2jFqyB5w6xix45pIGt1w6BpIHFpw6FuLiIsICJRdXnhu4NuIHPDoWNoIG7DoHkgZ2nDoCBt4buZdCB0csSDbSB04buHLiJdLCBbIuS7luacieS4gOeZvuWdl+mSseOAgiIsICJUxIEgeceSdSB5w6xix45pIGLEm24gc2jFqy4iLCAiQW5oIOG6pXkgY8OzIG3hu5l0IHRyxINtIHF1eeG7g24gc8OhY2guIl1dLCAibGV0dGVyIjogIkIiLCAiZW1vIjogIvCfkrsifV0=";
-
-  function __b64ToUtf8(b64) {
-    try {
-      const binary = atob(b64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      return new TextDecoder('utf-8').decode(bytes);
-    } catch (e) {
-      console.error("Lỗi giải mã Base64:", e);
-      return "[]";
+  // Dữ liệu từ vựng trực tiếp chuẩn Tiếng Trung - Pinyin - Tiếng Việt
+  const DATA = [
+    {
+      num: 1,
+      hz: "爱",
+      py: "ài",
+      pos: "đg",
+      meaning: "yêu, yêu thích",
+      cat: "DTU",
+      examples: [
+        ["我爱我的家人。", "Wǒ ài wǒ de jiārén.", "Tôi yêu gia đình của tôi."],
+        ["她很爱看电影。", "Tā hěn ài kàn diànyǐng.", "Cô ấy rất thích xem phim."],
+        ["爸爸爱喝茶。", "Bàba ài hē chá.", "Bố thích uống trà."]
+      ],
+      letter: "A",
+      emo: "❤️"
+    },
+    {
+      num: 2,
+      hz: "吧",
+      py: "ba",
+      pos: "trợ",
+      meaning: "(trợ từ đề nghị/phỏng đoán)",
+      cat: "TR",
+      examples: [
+        ["我们走吧。", "Wǒmen zǒu ba.", "Chúng ta đi thôi."],
+        ["你是老师吧？", "Nǐ shì lǎoshī ba?", "Anh là giáo viên phải không?"],
+        ["好吧，我知道了。", "Hǎo ba, wǒ zhīdào le.", "Được rồi, tôi biết rồi."]
+      ],
+      letter: "B",
+      emo: "💬"
+    },
+    {
+      num: 3,
+      hz: "八",
+      py: "bā",
+      pos: "số",
+      meaning: "số tám",
+      cat: "SO",
+      examples: [
+        ["我家有八口人。", "Wǒ jiā yǒu bā kǒu rén.", "Nhà tôi có tám người."],
+        ["现在八点了。", "Xiànzài bā diǎn le.", "Bây giờ là tám giờ rồi."],
+        ["爸爸很喜欢看书。", "Bàba hěn xǐhuān kàn shū.", "Bố rất thích đọc sách."]
+      ],
+      letter: "B",
+      emo: "8️⃣"
+    },
+    {
+      num: 4,
+      hz: "百",
+      py: "bǎi",
+      pos: "số",
+      meaning: "trăm",
+      cat: "SO",
+      examples: [
+        ["这本书一百块钱。", "Zhè běn shū yī bǎi kuài qián.", "Quyển sách này giá một trăm tệ."],
+        ["他有一百本书。", "Tā yǒu yī bǎi běn shū.", "Anh ấy có một trăm quyển sách."]
+      ],
+      letter: "B",
+      emo: "💯"
     }
-  }
-
-  let DATA = [];
-  try {
-    const decodedStr = __b64ToUtf8(__APP_B64);
-    if (decodedStr.trim().startsWith('const DATA =')) {
-      eval(decodedStr);
-    } else if (decodedStr.trim().startsWith('[')) {
-      DATA = JSON.parse(decodedStr);
-    }
-  } catch (err) {
-    console.error("Không thể khởi tạo mảng DATA:", err);
-  }
+  ];
 
   let learnedSet = new Set(JSON.parse(localStorage.getItem('hsk1_learned') || '[]'));
   let currentFilterLetter = 'ALL';
 
-  document.getElementById('login-btn').addEventListener('click', function() {
-    document.getElementById('login-section').style.display = 'none';
-    document.getElementById('dashboard-section').style.display = 'block';
-  });
+  // Chuyển màn hình Login -> Dashboard
+  const loginBtn = document.getElementById('login-btn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function() {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('dashboard-section').style.display = 'block';
+    });
+  }
 
   function backToDashboard() {
     document.getElementById('app-content').style.display = 'none';
@@ -1435,9 +1507,12 @@
     updateProgress();
   }
 
-  document.getElementById('search').addEventListener('input', function() {
-    renderContent();
-  });
+  const searchInput = document.getElementById('search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      renderContent();
+    });
+  }
 
   function renderTabs() {
     const tabsContainer = document.getElementById('tabs');
@@ -1483,7 +1558,7 @@
     const container = document.getElementById('content');
     if (!container) return;
 
-    const query = document.getElementById('search').value.toLowerCase().trim();
+    const query = (document.getElementById('search')?.value || '').toLowerCase().trim();
 
     const filtered = DATA.filter(item => {
       const matchLetter = (currentFilterLetter === 'ALL' || item.letter === currentFilterLetter);
@@ -1495,7 +1570,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding: 40px; color: #777;">Không tìm thấy từ vựng phù hợp.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding: 40px; color: #777; font-size: 16px;">Không tìm thấy từ vựng phù hợp.</div>`;
       return;
     }
 
@@ -1503,7 +1578,7 @@
       const isLearned = learnedSet.has(item.num);
       const examplesHtml = (item.examples || []).map(ex => `
         <div style="margin-top: 6px; padding: 8px; background: #f9f9f9; border-radius: 6px; border-left: 3px solid #d4af37;">
-          <div style="font-weight: bold; color: #2c3e50;">${ex[0] || ''} <button onclick="speak('${ex[0]}')" style="border:none; background:none; cursor:pointer; font-size:14px;">🔊</button></div>
+          <div style="font-weight: bold; color: #2c3e50; font-size: 15px;">${ex[0] || ''} <button onclick="speak('${ex[0]}')" style="border:none; background:none; cursor:pointer; font-size:14px;">🔊</button></div>
           <div style="color: #e67e22; font-size: 13px; margin: 2px 0;">${ex[1] || ''}</div>
           <div style="color: #555; font-size: 13px;">${ex[2] || ''}</div>
         </div>
@@ -1531,3 +1606,4 @@
 </script>
 
 </body>
+</html>
