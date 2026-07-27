@@ -1408,6 +1408,17 @@ const __APP_B64 = "Y29uc3QgREFUQSA9IFt7Im51bSI6IDEsICJoeiI6ICLniLEiLCAicHkiOiAiw
 </script>
 
 </div><!-- /app-content -->
+<script>
+function openHSK1() {
+    document.getElementById("dashboard-section").style.display = "none";
+    document.getElementById("app-content").style.display = "block";
+}
+
+function backToDashboard() {
+    document.getElementById("app-content").style.display = "none";
+    document.getElementById("dashboard-section").style.display = "block";
+}
+</script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>
