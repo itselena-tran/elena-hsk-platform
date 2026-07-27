@@ -1,92 +1,178 @@
-const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbyH_v7PwXh1T7W6gh6vD3CQYRm2N7FOJHiPYLm1Vb33cewIfCvI_UAgH7GrzOH80LjkZQ/exec";
-
 import { auth, provider } from "./firebase-config.js";
-import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Nút Đăng nhập & Đăng xuất trên giao diện HTML
+import {
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+// =========================
+// LINK APPS SCRIPT
+// =========================
+
+const GOOGLE_SHEET_API =
+"https://script.google.com/macros/s/AKfycbyH_v7PwXh1T7W6gh6vD3CQYRm2N7FOJHiPYLm1Vb33cewIfCvI_UAgH7GrzOH80LjkZQ/exec";
+
+
+// =========================
+// LẤY CÁC THÀNH PHẦN HTML
+// =========================
+
 const loginBtn = document.getElementById("login-btn");
 const logoutBtn = document.getElementById("logout-btn");
-const appContent = document.getElementById("app-content");
+
 const loginSection = document.getElementById("login-section");
+const dashboardSection = document.getElementById("dashboard-section");
+const appContent = document.getElementById("app-content");
 
-// 1. Xử lý sự kiện bấm nút Đăng nhập bằng Google
+
+// =========================
+// ĐĂNG NHẬP GOOGLE
+// =========================
+
 if (loginBtn) {
-  loginBtn.addEventListener("click", () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log("Đăng nhập Google thành công:", result.user);
-        const userEmail = result.user.email;
-        verifyStudentWithSheet(userEmail);
-      })
-      .catch((error) => {
-        console.error("Lỗi đăng nhập:", error);
-        alert("Đăng nhập thất bại, vui lòng thử lại!");
-      });
-  });
-}
 
-// 2. Xử lý sự kiện Đăng xuất
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    signOut(auth).then(() => {
-      console.log("Đã đăng xuất");
-      localStorage.removeItem("hsk_user_email");
-      if (loginSection) loginSection.style.display = "block";
-      if (appContent) appContent.style.display = "none";
+    loginBtn.addEventListener("click", async () => {
+
+        try{
+
+            await signInWithPopup(auth, provider);
+
+        }catch(error){
+
+            console.error(error);
+
+            alert("Đăng nhập thất bại!");
+
+        }
+
     });
-  });
+
 }
 
-// 3. Theo dõi trạng thái đăng nhập (Bảo vệ nội dung website khi F5/Mở trang)
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Nếu học sinh đã đăng nhập Google -> Tiếp tục check xem email có trong Google Sheet không
-    verifyStudentWithSheet(user.email);
-    updateUserProfile(user);
-  } else {
-    // Chưa đăng nhập Google -> Khóa nội dung học
-    if (loginSection) loginSection.style.display = "block";
-    if (appContent) appContent.style.display = "none";
-  }
+
+
+// =========================
+// FIREBASE TỰ KIỂM TRA
+// =========================
+
+onAuthStateChanged(auth, async(user)=>{
+
+    if(!user){
+
+        if(loginSection) loginSection.style.display="block";
+
+        if(dashboardSection) dashboardSection.style.display="none";
+
+        if(appContent) appContent.style.display="none";
+
+        return;
+
+    }
+
+    updateUser(user);
+
+    await verifyStudent(user.email);
+
 });
 
-// 4. Hiển thị thông tin tên và email học sinh
-function updateUserProfile(user) {
-  const userNameEl = document.getElementById("user-name");
-  const userEmailEl = document.getElementById("user-email");
-  const userAvatarEl = document.getElementById("user-avatar");
 
-  if (userNameEl) userNameEl.textContent = user.displayName || "Học sinh";
-  if (userEmailEl) userEmailEl.textContent = user.email;
-  if (userAvatarEl && user.photoURL) userAvatarEl.src = user.photoURL;
+
+
+// =========================
+// KIỂM TRA GOOGLE SHEET
+// =========================
+
+async function verifyStudent(email){
+
+    try{
+
+        const response = await fetch(
+            `${GOOGLE_SHEET_API}?email=${encodeURIComponent(email)}`
+        );
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if(data.status==="APPROVED"){
+
+            if(loginSection)
+                loginSection.style.display="none";
+
+            if(dashboardSection)
+                dashboardSection.style.display="block";
+
+            if(appContent)
+                appContent.style.display="none";
+
+        }
+
+        else if(data.status==="PENDING"){
+
+            alert("Tài khoản đang chờ duyệt.");
+
+            await signOut(auth);
+
+        }
+
+        else{
+
+            alert("Bạn chưa được cấp quyền sử dụng website.");
+
+            await signOut(auth);
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Không kết nối được Google Sheet.");
+
+    }
+
 }
 
-// 5. Hàm gửi Email lên Google Sheet để kiểm tra quyền truy cập
-async function verifyStudentWithSheet(userEmail) {
-  try {
-    const res = await fetch(`${GOOGLE_SHEET_API}?email=${encodeURIComponent(userEmail)}`);
-    const data = await res.json();
 
-    if (data.status === "APPROVED") {
-      // ✅ Đã duyệt -> Mở khóa web cho vào học
-      localStorage.setItem("hsk_user_email", userEmail);
-      if (loginSection) loginSection.style.display = "none";
-      if (appContent) appContent.style.display = "block";
 
-      const gateEl = document.getElementById("gate");
-      if (gateEl) gateEl.style.display = "none";
+// =========================
+// ĐĂNG XUẤT
+// =========================
 
-    } else if (data.status === "PENDING") {
-      // ⏳ Có trong sheet nhưng chưa ghi "Đã duyệt"
-      alert("Tài khoản của bạn đang chờ duyệt. Vui lòng liên hệ lại sau nhé!");
-      signOut(auth); // Đăng xuất ra luôn
-    } else {
-      // ❌ Không có email trong sheet
-      alert(`Email (${userEmail}) chưa được cấp quyền truy cập. Vui lòng liên hệ để đăng ký học!`);
-      signOut(auth); // Đăng xuất ra luôn
-    }
-  } catch (error) {
-    console.error("Lỗi kiểm tra Google Sheet:", error);
-    alert("Có lỗi kết nối hệ thống kiểm tra tài khoản!");
-  }
+if(logoutBtn){
+
+    logoutBtn.addEventListener("click",async()=>{
+
+        await signOut(auth);
+
+    });
+
+}
+
+
+
+// =========================
+// HIỂN THỊ THÔNG TIN
+// =========================
+
+function updateUser(user){
+
+    const userName=document.getElementById("user-name");
+
+    const userEmail=document.getElementById("user-email");
+
+    const userAvatar=document.getElementById("user-avatar");
+
+    if(userName)
+        userName.textContent=user.displayName;
+
+    if(userEmail)
+        userEmail.textContent=user.email;
+
+    if(userAvatar && user.photoURL)
+        userAvatar.src=user.photoURL;
+
 }
