@@ -1,4 +1,4 @@
-const GOOGLE_SHEET_API = "https://script.google.com/macros/library/d/1lVDNsvhUqXvCR2HnzVikfCrVHYwMgYgyUWOU0KTfRuMnnYtiuF3jfUaP/1";
+const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbxSxKja8_bfCR5YDbIRcdrMAfh9ckX8SFnnYdZtIhsP7M-netbLo7wpCqNGVCBXHXHwwg/exec";
 
 import { auth, provider } from "./firebase-config.js";
 import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
