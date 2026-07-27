@@ -1443,5 +1443,17 @@ function backToDashboard() {
   document.getElementById('app-content').style.display = 'none';
   document.getElementById('dashboard-section').style.display = 'block';
 }
+  <!-- 1. Nhúng các thư viện bên ngoài (Firebase CDN, Hanzi Writer...) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- 2. Nhúng file xử lý Đăng nhập / Auth của bạn -->
+  <script src="auth.js"></script>
+
+  <!-- 3. Nhúng file chứa dữ liệu từ vựng & Logic giao diện ứng dụng -->
+  <script src="app.js">
+    
+  </script>
+</body>
 </body>
 </html>
