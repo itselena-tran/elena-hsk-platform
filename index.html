@@ -418,8 +418,8 @@ if (dashSection.style.display !== "none") initDashboardOnce();
 // Nút đăng xuất: cố gắng dùng lại Firebase Auth mà auth.js đã khởi tạo.
 document.getElementById("logout-btn").addEventListener("click", async () => {
   try {
-    const { getApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
-    const { getAuth, signOut } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+ const { getApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
     await signOut(getAuth(getApp()));
   } catch (e) {
     console.warn("Đăng xuất thủ công (fallback):", e);
