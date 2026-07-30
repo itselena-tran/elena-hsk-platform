@@ -305,24 +305,13 @@ async function fetchAvailableFiles() {
    (mảng chuỗi, ví dụ: ["hsk1","hsk2"]). Sửa lại hàm này cho
    khớp với cấu trúc dữ liệu thật của bạn nếu khác.
    ======================================================= */
-async function checkUserAccessLevels(user) {
-  try {
-    // Dùng lại app Firebase mà auth.js đã initializeApp() trước đó.
-    const { getApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-    const { getFirestore, doc, getDoc } =
-      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    const db = getFirestore(getApp());
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists() && Array.isArray(snap.data().registeredLevels)) {
-      return new Set(snap.data().registeredLevels.map(l => String(l).toLowerCase()));
-    }
-  } catch (e) {
-    console.warn("Không đọc được danh sách cấp độ đã đăng ký, mặc định chỉ mở HSK1:", e);
-  }
-  // Mặc định an toàn nếu chưa nối được dữ liệu: chỉ mở HSK1.
-  return new Set(["hsk1"]);
+async function checkUserAccessLevels() {
+  return new Set(
+    (window.registeredLevels || []).map(level =>
+      String(level).toLowerCase()
+    )
+  );
 }
-
 /* =======================================================
    3) DỰNG GIAO DIỆN DASHBOARD
    ======================================================= */
@@ -393,8 +382,8 @@ async function initDashboardOnce() {
     // Lấy user hiện tại từ Firebase (đã được auth.js đăng nhập).
     let user = null;
     try {
-      const { getApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-      const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+      const { getApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+      const { getAuth } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
       const auth = getAuth(getApp());
       user = auth.currentUser;
       if (user) {
@@ -405,7 +394,7 @@ async function initDashboardOnce() {
       console.warn("Không lấy được thông tin user hiện tại:", e);
     }
 
-    const registeredLevels = user ? await checkUserAccessLevels(user) : new Set(["hsk1"]);
+   const registeredLevels = await checkUserAccessLevels();
     renderLevelGrid(availableFiles, registeredLevels);
   } catch (e) {
     console.error(e);
