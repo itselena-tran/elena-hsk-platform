@@ -3,7 +3,9 @@ import { auth, provider } from "./firebase-config.js";
 import {
   signInWithPopup,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // =========================
@@ -36,13 +38,15 @@ if (loginBtn) {
 
         try {
 
+            // Thiết lập lưu phiên làm việc vào LocalStorage để khắc phục lỗi Safari chặn cookie/session
+            await setPersistence(auth, browserLocalPersistence);
             await signInWithPopup(auth, provider);
 
         } catch (error) {
 
             console.error(error);
 
-            alert("Đăng nhập thất bại!");
+            alert("Đăng nhập thất bại: " + error.message);
 
         }
 
