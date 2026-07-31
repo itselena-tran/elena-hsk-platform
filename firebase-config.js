@@ -1,21 +1,44 @@
-// Khởi tạo SDK Firebase (Sử dụng CDN dạng Module)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+// =========================
+// FIREBASE CONFIG
+// =========================
 
-// Thay thế các thông tin bên dưới bằng firebaseConfig thu được ở Bước 2.1
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+    getAuth,
+    GoogleAuthProvider,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAVbnYruosyvlkHYwvmve59RjPLolvRVsg",
-  authDomain: "itselena-hsk.firebaseapp.com",
-  projectId: "itselena-hsk",
-  storageBucket: "itselena-hsk.firebasestorage.app",
-  messagingSenderId: "422292479641",
-  appId: "1:422292479641:web:4432c1710553959059a208",
-  measurementId: "G-PZGVDTWGFP"
+    apiKey: "AIzaSyAVbnYruosyvlkHYwvmve59RjPLolvRVsg",
+    authDomain: "itselena-hsk.firebaseapp.com",
+    projectId: "itselena-hsk",
+    storageBucket: "itselena-hsk.firebasestorage.app",
+    messagingSenderId: "422292479641",
+    appId: "1:422292479641:web:4432c1710553959059a208",
+    measurementId: "G-PZGVDTWGFP"
 };
 
-// Initialize Firebase
+// Khởi tạo Firebase
 const app = initializeApp(firebaseConfig);
+
+// Khởi tạo Authentication
 const auth = getAuth(app);
+
+// Lưu phiên đăng nhập trên trình duyệt
+await setPersistence(auth, browserLocalPersistence);
+
+// Google Provider
 const provider = new GoogleAuthProvider();
 
-export { auth, provider };
+// Luôn hiện danh sách tài khoản Google
+provider.setCustomParameters({
+    prompt: "select_account"
+});
+
+export {
+    auth,
+    provider
+};
