@@ -3,9 +3,7 @@ import { auth, provider } from "./firebase-config.js";
 import {
   signInWithPopup,
   signOut,
-  onAuthStateChanged,
-  setPersistence,
-  browserLocalPersistence
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // =========================
@@ -29,6 +27,64 @@ const appContent = document.getElementById("app-content");
 
 
 // =========================
+// PHÁT HIỆN TRÌNH DUYỆT TRONG APP (IN-APP BROWSER)
+// Messenger, Facebook, Instagram, TikTok, Zalo, Line... đều
+// chặn hoặc phân vùng sessionStorage/cookie bên thứ ba, khiến
+// đăng nhập Google báo lỗi "missing initial state". Google
+// cũng chủ động không cho đăng nhập từ các WebView này.
+// =========================
+
+function detectInAppBrowser() {
+  const ua = navigator.userAgent || "";
+  const patterns = [
+    { key: "FBAN|FBAV|FB_IAB", label: "Facebook" },
+    { key: "Messenger", label: "Messenger" },
+    { key: "Instagram", label: "Instagram" },
+    { key: "Line/", label: "Line" },
+    { key: "MicroMessenger", label: "Zalo/WeChat" },
+    { key: "TikTok|musical_ly|BytedanceWebview", label: "TikTok" },
+  ];
+  for (const p of patterns) {
+    if (new RegExp(p.key, "i").test(ua)) return p.label;
+  }
+  // iOS WebView không phải Safari thật (thiếu "Safari" trong UA)
+  const isIOS = /iP(hone|od|ad)/.test(ua);
+  if (isIOS && !/Safari/.test(ua) && /AppleWebKit/.test(ua)) return "ứng dụng khác";
+  return null;
+}
+
+function showInAppBrowserWarning(appLabel) {
+  if (!loginSection || document.getElementById("iab-warning")) return;
+
+  const box = loginSection.querySelector(".login-box");
+  if (!box) return;
+
+  const warning = document.createElement("div");
+  warning.id = "iab-warning";
+  warning.style.cssText =
+    "margin-top:16px;padding:14px;border-radius:10px;background:#fdecea;" +
+    "border:1px solid #f5c6cb;color:#922b21;font-size:13px;line-height:1.5;text-align:left;";
+  warning.innerHTML =
+    `⚠️ Bạn đang mở link này trong <b>${appLabel}</b>. Đăng nhập Google sẽ <b>không hoạt động</b> ở đây.<br><br>` +
+    `Vui lòng bấm biểu tượng <b>"⋮" hoặc "•••"</b> ở góc màn hình, chọn <b>"Mở bằng trình duyệt" / "Open in Browser"</b>, ` +
+    `rồi đăng nhập lại bằng Chrome hoặc Safari.`;
+
+  box.appendChild(warning);
+
+  if (loginBtn) {
+    loginBtn.disabled = true;
+    loginBtn.style.opacity = "0.5";
+    loginBtn.style.cursor = "not-allowed";
+  }
+}
+
+const inAppBrowserLabel = detectInAppBrowser();
+if (inAppBrowserLabel) {
+  showInAppBrowserWarning(inAppBrowserLabel);
+}
+
+
+// =========================
 // ĐĂNG NHẬP GOOGLE
 // =========================
 
@@ -36,17 +92,39 @@ if (loginBtn) {
 
     loginBtn.addEventListener("click", async () => {
 
+        if (inAppBrowserLabel) {
+            alert(
+                `Không thể đăng nhập Google trong ${inAppBrowserLabel}.\n\n` +
+                `Vui lòng mở link này bằng Chrome hoặc Safari (bấm "⋮"/"•••" rồi chọn "Mở bằng trình duyệt").`
+            );
+            return;
+        }
+
         try {
 
-            // Thiết lập lưu phiên làm việc vào LocalStorage để khắc phục lỗi Safari chặn cookie/session
-            await setPersistence(auth, browserLocalPersistence);
             await signInWithPopup(auth, provider);
 
         } catch (error) {
 
             console.error(error);
 
-            alert("Đăng nhập thất bại: " + error.message);
+            const msg = String(error && (error.message || error.code) || "");
+
+            if (/missing.?initial.?state/i.test(msg) || /storage.?partition/i.test(msg)) {
+                alert(
+                    "Không thể đăng nhập do trình duyệt hiện tại chặn bộ nhớ tạm (sessionStorage).\n\n" +
+                    "Đây thường xảy ra khi mở link từ Messenger, Facebook, Instagram, Zalo... " +
+                    "Vui lòng mở link này bằng Chrome hoặc Safari rồi thử lại."
+                );
+            } else if (error && error.code === "auth/popup-blocked") {
+                alert("Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép popup rồi thử lại.");
+            } else if (error && error.code === "auth/cancelled-popup-request") {
+                // Người dùng bấm nút nhiều lần / mở popup khác trước đó — bỏ qua, không cần alert.
+            } else if (error && error.code === "auth/popup-closed-by-user") {
+                // Người dùng tự đóng popup — không cần alert.
+            } else {
+                alert("Đăng nhập thất bại! Vui lòng thử lại hoặc dùng trình duyệt Chrome/Safari.");
+            }
 
         }
 
