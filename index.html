@@ -1,518 +1,384 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HỌC TỪ VỰNG HSK 3.0 VỚI ITSELENA.TRAN</title>
+<style>
+  :root {
+    --red: #c0392b;
+    --red-dark: #922b21;
+    --gold: #d4af37;
+    --bg: #fdf6ec;
+    --card: #ffffff;
+    --ink: #2c2c2c;
+    --muted: #7a7a7a;
+    --border: #ecdfc8;
+    --green: #27ae60;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  /* ============ 1. MÀN HÌNH ĐĂNG NHẬP ============ */
+  #login-section {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top, #7a1f1f, #2b0f0f 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  }
+  .login-box {
+    width: 380px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 18px;
+    padding: 38px 30px;
+    text-align: center;
+    box-shadow: 0 12px 34px rgba(0,0,0,.35);
+    border-top: 6px solid var(--gold);
+    position: relative;
+  }
+  .login-box::before {
+    content: "囍";
+    display: block;
+    font-size: 34px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .login-box h1 {
+    font-size: 21px;
+    line-height: 1.45;
+    color: var(--red-dark);
+    margin: 0 0 8px;
+    letter-spacing: .5px;
+  }
+  .login-box p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+  #login-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--red);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background .15s;
+  }
+  #login-btn:hover { background: var(--red-dark); }
+  #login-btn svg { width: 20px; height: 20px; }
+
+  /* ============ 2. DASHBOARD ============ */
+  #dashboard-section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+  .dash-header {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: #fff;
+    padding: 34px 20px 26px;
+    text-align: center;
+    margin: 0 -16px 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.15);
+  }
+  .dash-header h1 {
+    margin: 0 0 6px;
+    font-size: 1.5rem;
+    letter-spacing: .5px;
+  }
+  .dash-header p {
+    margin: 0;
+    opacity: .9;
+    font-size: .92rem;
+  }
+  .dash-user-bar {
+    max-width: 1080px;
+    margin: 14px auto 0;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .dash-user-info {
+    font-size: .85rem;
+    color: var(--muted);
+  }
+  .dash-user-info b { color: var(--ink); }
+  #logout-btn {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: .85rem;
+  }
+  #logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+  .level-title {
+    text-align: center;
+    color: var(--red-dark);
+    margin: 30px 0 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,.05);
+    transition: transform .12s, box-shadow .12s;
+    position: relative;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,.1); }
+  .card h3 {
+    margin: 10px 0 4px;
+    color: var(--red-dark);
+    font-size: 1.35rem;
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: .85rem;
+  }
+  .badge {
+    font-weight: 700;
+    font-size: .8rem;
+  }
+  .card.unlocked { border: 2px solid var(--green); }
+  .card.unlocked .badge { color: var(--green); }
+  .card.locked { opacity: .65; cursor: not-allowed; }
+  .card.locked .badge { color: #e74c3c; }
+  .card.missing {
+    opacity: .4;
+    cursor: not-allowed;
+    border-style: dashed;
+  }
+  .card.missing .badge { color: var(--muted); }
+
+  .dash-loading, .dash-error {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--muted);
+  }
+  .dash-error { color: var(--red-dark); }
+
+  .copyright-notice {
+    max-width: 1080px;
+    margin: 40px auto 0;
+    padding: 14px 16px 0;
+    font-size: .72rem;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- =======================================================
+     1. MÀN HÌNH ĐĂNG NHẬP
+======================================================= -->
+<div id="login-section">
+  <div class="login-box">
+    <h1>HỌC TỪ VỰNG HSK 3.0<br>VỚI ITSELENA.TRAN</h1>
+    <p>Đăng nhập bằng Google để bắt đầu học và lưu tiến độ.</p>
+    <button id="login-btn">
+      <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.4 16 18.8 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.2 4 9.5 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.4 26.7 36 24 36c-5.3 0-9.6-3.3-11.3-8l-6.5 5C9.4 39.6 16.1 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C39.9 36.7 44 31 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+      Đăng nhập bằng Google
+    </button>
+  </div>
+</div>
+
+<!-- =======================================================
+     2. DASHBOARD (Chọn cấp độ)
+======================================================= -->
+<div id="dashboard-section" style="display:none;">
+  <div class="dash-header">
+    <h1>HỌC TỪ VỰNG HSK 3.0 VỚI ITSELENA.TRAN</h1>
+    <p>Chữ Hán · Pinyin · Từ loại · Nghĩa · Ví dụ minh họa (theo Đề cương HSK 3.0)</p>
+  </div>
+
+  <div class="dash-user-bar">
+    <div class="dash-user-info">Xin chào, <b id="user-name">bạn</b> 👋</div>
+    <button id="logout-btn">Đăng xuất</button>
+  </div>
+
+  <div class="level-title">DANH SÁCH CẤP ĐỘ HSK 3.0</div>
+  <div id="level-grid" class="grid">
+    <div class="dash-loading">Đang tải danh sách cấp độ…</div>
+  </div>
+
+  <div class="copyright-notice">© Bản quyền thuộc về Itselena.tran · Tuyệt đối không chia sẻ công khai link website dưới bất kỳ hình thức nào.</div>
+</div>
+
 <script>
-// =======================================================
-// CẤU HÌNH GITHUB
-// =======================================================
-
+/* =======================================================
+   CẤU HÌNH — CHỈ CẦN SỬA Ở ĐÂY khi bạn đổi repo GitHub
+   ======================================================= */
 const GITHUB_CONFIG = {
-    owner: "itselena-tran",
-    repo: "elena-hsk-platform",
-    branch: "main",
-    folder: ""
+  owner: "itselena-tran",
+  repo: "elena-hsk-platform",
+  branch: "main",
+  folder: "",
 };
-
-// =======================================================
-// URL GITHUB PAGES
-// =======================================================
-
-const PAGES_BASE_URL =
-`https://${GITHUB_CONFIG.owner}.github.io/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.folder ? GITHUB_CONFIG.folder + "/" : ""}`;
-
-
-// =======================================================
-// DANH SÁCH HSK
-// =======================================================
+  
+const PAGES_BASE_URL = `https://${GITHUB_CONFIG.owner}.github.io/${GITHUB_CONFIG.repo}/${GITHUB_CONFIG.folder ? GITHUB_CONFIG.folder + "/" : ""}`;
 
 const LEVELS = [
-
-    {
-        key: "hsk1",
-        file: "hsk1.html",
-        label: "HSK 1",
-        range: "Từ vựng 1 - 300"
-    },
-
-    {
-        key: "hsk2",
-        file: "hsk2.html",
-        label: "HSK 2",
-        range: "Từ vựng 301 - 500"
-    },
-
-    {
-        key: "hsk3",
-        file: "hsk3.html",
-        label: "HSK 3",
-        range: "Từ vựng 501 - 1000"
-    },
-
-    {
-        key: "hsk4",
-        file: "hsk4.html",
-        label: "HSK 4",
-        range: "Từ vựng 1001 - 2000"
-    },
-
-    {
-        key: "hsk5",
-        file: "hsk5.html",
-        label: "HSK 5",
-        range: "Từ vựng 2001 - 3600"
-    },
-
-    {
-        key: "hsk6",
-        file: "hsk6.html",
-        label: "HSK 6",
-        range: "Từ vựng 3601 - 5400"
-    },
-
-    {
-        key: "hsk7-9",
-        file: "hsk7-9.html",
-        label: "HSK 7-9",
-        range: "Từ vựng 5401 - 11000"
-    }
-
+  { key: "hsk1",   file: "hsk1.html",   label: "HSK 1",     range: "Từ vựng 1 - 300" },
+  { key: "hsk2",   file: "hsk2.html",   label: "HSK 2",     range: "Từ vựng 301 - 500" },
+  { key: "hsk3",   file: "hsk3.html",   label: "HSK 3",     range: "Từ vựng 501 - 1.000" },
+  { key: "hsk4",   file: "hsk4.html",   label: "HSK 4",     range: "Từ vựng 1.001 - 2.000" },
+  { key: "hsk5",   file: "hsk5.html",   label: "HSK 5",     range: "Từ vựng 2.001 - 3.600" },
+  { key: "hsk6",   file: "hsk6.html",   label: "HSK 6",     range: "Từ vựng 3.601 - 5.400" },
+  { key: "hsk7-9", file: "hsk7-9.html", label: "HSK 7 - 9", range: "Từ vựng 5.401 - 11.000" },
 ];
 
-
-// =======================================================
-// CACHE DANH SÁCH FILE
-// =======================================================
-
-let availableFilesCache = null;
-
-
-// =======================================================
-// LẤY DANH SÁCH FILE TỪ GITHUB
-// =======================================================
-
+/* =======================================================
+   1) TỰ ĐỘNG PHÁT HIỆN FILE MỚI TRÊN GITHUB
+   ======================================================= */
 async function fetchAvailableFiles() {
-
-    if (availableFilesCache)
-        return availableFilesCache;
-
-    const api =
-`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.folder}?ref=${GITHUB_CONFIG.branch}`;
-
-    try {
-
-        const response = await fetch(
-
-            api,
-
-            {
-                cache: "no-store"
-            }
-
-        );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "GitHub API " + response.status
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        availableFilesCache =
-            new Set(
-
-                data
-
-                    .filter(
-                        item => item.type === "file"
-                    )
-
-                    .map(
-                        item =>
-                        item.name.toLowerCase()
-                    )
-
-            );
-
-        return availableFilesCache;
-
-    }
-
-    catch (error) {
-
-        console.warn(
-
-            "Không đọc được GitHub API.",
-
-            error
-
-        );
-
-        availableFilesCache = null;
-
-        return null;
-
-    }
-
+  const api = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.folder}?ref=${GITHUB_CONFIG.branch}`;
+  try {
+    const res = await fetch(api);
+    if (!res.ok) throw new Error("GitHub API lỗi: " + res.status);
+    const list = await res.json();
+    return new Set(list.filter(i => i.type === "file").map(i => i.name.toLowerCase()));
+  } catch (e) {
+    console.warn("Không lấy được danh sách file, giả định tất cả đều tồn tại:", e);
+    return null; 
+  }
 }
-  // =======================================================
-// LẤY DANH SÁCH HSK ĐƯỢC PHÉP HỌC
-// auth.js sẽ gán:
-// window.registeredLevels = ["hsk1","hsk2",...]
-// =======================================================
 
+/* =======================================================
+   2) KIỂM TRA CẤP ĐỘ TÀI KHOẢN ĐÃ ĐĂNG KÝ
+   Lấy trực tiếp biến window.registeredLevels từ auth.js
+   ======================================================= */
 async function checkUserAccessLevels() {
-
-    if (!Array.isArray(window.registeredLevels)) {
-
-        return new Set();
-
-    }
-
-    return new Set(
-
-        window.registeredLevels.map(
-
-            level =>
-
-                String(level)
-
-                    .trim()
-
-                    .toLowerCase()
-
-        )
-
-    );
-
+  return new Set(
+    (window.registeredLevels || []).map(level =>
+      String(level).toLowerCase()
+    )
+  );
 }
 
+/* =======================================================
+   3) DỰNG GIAO DIỆN DASHBOARD
+   ======================================================= */
+function renderLevelGrid(availableFiles, registeredLevels) {
+  const grid = document.getElementById("level-grid");
+  grid.innerHTML = "";
 
+  LEVELS.forEach(level => {
+    const fileExists = availableFiles === null || availableFiles.has(level.file.toLowerCase());
+    const isRegistered = registeredLevels.has(level.key);
 
-// =======================================================
-// RENDER DASHBOARD
-// =======================================================
+    const card = document.createElement("div");
+    let badgeText, badgeState;
+    if (!fileExists) {
+      card.className = "card missing";
+      badgeText = "🕐 Nội dung đang cập nhật";
+      badgeState = "missing";
+    } else if (isRegistered) {
+      card.className = "card unlocked";
+      badgeText = "✓ Đã mở khóa";
+      badgeState = "unlocked";
+    } else {
+      card.className = "card locked";
+      badgeText = "🔒 Chưa đăng ký";
+      badgeState = "locked";
+    }
 
-function renderLevelGrid(
+    card.innerHTML = `
+      <span class="badge">${badgeText}</span>
+      <h3>${level.label}</h3>
+      <p>${level.range}</p>
+    `;
 
-    availableFiles,
-
-    registeredLevels
-
-) {
-
-    const grid =
-
-        document.getElementById("level-grid");
-
-    if (!grid)
+    card.addEventListener("click", () => {
+      if (badgeState === "missing") {
+        alert(`Nội dung ${level.label} đang được biên soạn, vui lòng quay lại sau!`);
         return;
-
-    grid.innerHTML = "";
-
-
-
-    LEVELS.forEach(level => {
-
-        const fileExists =
-
-            availableFiles === null ||
-
-            availableFiles.has(
-
-                level.file.toLowerCase()
-
-            );
-
-
-
-        const registered =
-
-            registeredLevels.has(
-
-                level.key.toLowerCase()
-
-            );
-
-
-
-        const card =
-
-            document.createElement("div");
-
-
-
-        let state = "";
-
-        let badge = "";
-
-
-
-        if (!fileExists) {
-
-            state = "missing";
-
-            badge = "🕐 Nội dung đang cập nhật";
-
-        }
-
-        else if (registered) {
-
-            state = "unlocked";
-
-            badge = "✓ Đã mở khóa";
-
-        }
-
-        else {
-
-            state = "locked";
-
-            badge = "🔒 Chưa đăng ký";
-
-        }
-
-
-
-        card.className =
-
-            `card ${state}`;
-
-
-
-        card.innerHTML =
-
-        `
-
-            <span class="badge">
-
-                ${badge}
-
-            </span>
-
-            <h3>
-
-                ${level.label}
-
-            </h3>
-
-            <p>
-
-                ${level.range}
-
-            </p>
-
-        `;
-
-
-
-        card.addEventListener(
-
-            "click",
-
-            () => {
-
-
-
-                if (state === "missing") {
-
-                    alert(
-
-                        `${level.label} đang được cập nhật.`
-
-                    );
-
-                    return;
-
-                }
-
-
-
-                if (state === "locked") {
-
-                    alert(
-
-                        `Bạn chưa được cấp quyền học ${level.label}.`
-
-                    );
-
-                    return;
-
-                }
-
-
-
-                // Không dùng window.open()
-
-                // Safari và Chrome iOS đôi khi chặn popup
-
-                window.location.href =
-
-                    PAGES_BASE_URL +
-
-                    level.file;
-
-            }
-
-        );
-
-
-
-        grid.appendChild(card);
-
+      }
+      if (badgeState === "locked") {
+        alert(`Tài khoản của bạn chưa đăng ký cấp độ ${level.label}!`);
+        return;
+      }
+      window.open(PAGES_BASE_URL + level.file, "_blank");
     });
 
+    grid.appendChild(card);
+  });
 }
-  // =======================================================
-// KHỞI TẠO DASHBOARD
-// =======================================================
 
+/* =======================================================
+   4) KHỞI TẠO DASHBOARD KHI ĐƯỢC AUTH.JS GỌI
+   ======================================================= */
 let dashboardInitialized = false;
 
 async function initDashboardOnce() {
+  if (dashboardInitialized) return;
+  dashboardInitialized = true;
 
-    if (dashboardInitialized)
-        return;
+  const grid = document.getElementById("level-grid");
+  grid.innerHTML = '<div class="dash-loading">Đang tải danh sách cấp độ…</div>';
 
-    dashboardInitialized = true;
-
-    const grid =
-        document.getElementById("level-grid");
-
-    if (grid) {
-
-        grid.innerHTML =
-            '<div class="dash-loading">Đang tải danh sách cấp độ...</div>';
-
-    }
-
-    try {
-
-        const availableFiles =
-            await fetchAvailableFiles();
-
-        const registeredLevels =
-            await checkUserAccessLevels();
-
-        // ===================================================
-        // LẤY THÔNG TIN USER TỪ auth.js
-        // ===================================================
-
-        const nameElement =
-            document.getElementById("dash-user-name");
-
-        if (nameElement) {
-
-            const currentUser = window.currentUser;
-
-            if (currentUser) {
-
-                nameElement.textContent =
-                    currentUser.displayName ||
-                    currentUser.email ||
-                    "bạn";
-
-            }
-
-            else {
-
-                nameElement.textContent = "bạn";
-
-            }
-
-        }
-
-        renderLevelGrid(
-
-            availableFiles,
-
-            registeredLevels
-
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        dashboardInitialized = false;
-
-        if (grid) {
-
-            grid.innerHTML =
-                '<div class="dash-error">Không tải được Dashboard.</div>';
-
-        }
-
-    }
-
+  try {
+    const availableFiles = await fetchAvailableFiles();
+    const registeredLevels = await checkUserAccessLevels();
+    renderLevelGrid(availableFiles, registeredLevels);
+  } catch (e) {
+    console.error(e);
+    grid.innerHTML = '<div class="dash-error">Không tải được danh sách cấp độ. Vui lòng tải lại trang.</div>';
+  }
 }
 
-
-
-// =======================================================
-// THEO DÕI ĐĂNG NHẬP
-// =======================================================
-
-const dashboardSection =
-
-document.getElementById("dashboard-section");
-
-
-
-const observer =
-
+// Lắng nghe sự thay đổi giao diện từ auth.js để dựng Dashboard
+const dashSection = document.getElementById("dashboard-section");
 new MutationObserver(() => {
-
-    const visible =
-
-        dashboardSection.style.display !== "none";
-
-
-
-    if (visible) {
-
-        initDashboardOnce();
-
-    }
-
-    else {
-
-        dashboardInitialized = false;
-
-    }
-
-});
-
-
-
-observer.observe(
-
-    dashboardSection,
-
-    {
-
-        attributes: true,
-
-        attributeFilter: [
-
-            "style"
-
-        ]
-
-    }
-
-);
-
-
-
-if (
-
-    dashboardSection.style.display !== "none"
-
-) {
-
+  if (dashSection.style.display !== "none") {
     initDashboardOnce();
+  } else {
+    dashboardInitialized = false; // Reset khi đăng xuất
+  }
+}).observe(dashSection, { attributes: true, attributeFilter: ["style"] });
 
-}
+if (dashSection.style.display !== "none") initDashboardOnce();
+
+</script>
+
+<!-- =======================================================
+     FILE AUTH.JS XỬ LÝ TOÀN BỘ LOGIC
+======================================================= -->
+<script type="module" src="auth.js"></script>
+</body>
+</html>
