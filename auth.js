@@ -1,10 +1,11 @@
 import { auth, provider } from "./firebase-config.js";
 
 import {
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 
 // =========================
 // LINK APPS SCRIPT
@@ -27,143 +28,290 @@ const appContent = document.getElementById("app-content");
 
 
 // =========================
-// PHÁT HIỆN TRÌNH DUYỆT TRONG APP (IN-APP BROWSER)
-// Messenger, Facebook, Instagram, TikTok, Zalo, Line... đều
-// chặn hoặc phân vùng sessionStorage/cookie bên thứ ba, khiến
-// đăng nhập Google báo lỗi "missing initial state". Google
-// cũng chủ động không cho đăng nhập từ các WebView này.
+// TRÁNH CLICK LIÊN TỤC
+// =========================
+
+let loggingIn = false;
+
+
+// =========================
+// TRÁNH VERIFY NHIỀU LẦN
+// =========================
+
+let verifiedEmail = null;
+
+
+// =========================
+// PHÁT HIỆN IN-APP BROWSER
 // =========================
 
 function detectInAppBrowser() {
-  const ua = navigator.userAgent || "";
-  const patterns = [
-    { key: "FBAN|FBAV|FB_IAB", label: "Facebook" },
-    { key: "Messenger", label: "Messenger" },
-    { key: "Instagram", label: "Instagram" },
-    { key: "Line/", label: "Line" },
-    { key: "MicroMessenger", label: "Zalo/WeChat" },
-    { key: "TikTok|musical_ly|BytedanceWebview", label: "TikTok" },
-  ];
-  for (const p of patterns) {
-    if (new RegExp(p.key, "i").test(ua)) return p.label;
-  }
-  // iOS WebView không phải Safari thật (thiếu "Safari" trong UA)
-  const isIOS = /iP(hone|od|ad)/.test(ua);
-  if (isIOS && !/Safari/.test(ua) && /AppleWebKit/.test(ua)) return "ứng dụng khác";
-  return null;
-}
 
-function showInAppBrowserWarning(appLabel) {
-  if (!loginSection || document.getElementById("iab-warning")) return;
+    const ua = navigator.userAgent || "";
 
-  const box = loginSection.querySelector(".login-box");
-  if (!box) return;
+    const patterns = [
 
-  const warning = document.createElement("div");
-  warning.id = "iab-warning";
-  warning.style.cssText =
-    "margin-top:16px;padding:14px;border-radius:10px;background:#fdecea;" +
-    "border:1px solid #f5c6cb;color:#922b21;font-size:13px;line-height:1.5;text-align:left;";
-  warning.innerHTML =
-    `⚠️ Bạn đang mở link này trong <b>${appLabel}</b>. Đăng nhập Google sẽ <b>không hoạt động</b> ở đây.<br><br>` +
-    `Vui lòng bấm biểu tượng <b>"⋮" hoặc "•••"</b> ở góc màn hình, chọn <b>"Mở bằng trình duyệt" / "Open in Browser"</b>, ` +
-    `rồi đăng nhập lại bằng Chrome hoặc Safari.`;
+        { key: "FBAN|FBAV|FB_IAB", label: "Facebook" },
 
-  box.appendChild(warning);
+        { key: "Messenger", label: "Messenger" },
 
-  if (loginBtn) {
-    loginBtn.disabled = true;
-    loginBtn.style.opacity = "0.5";
-    loginBtn.style.cursor = "not-allowed";
-  }
-}
+        { key: "Instagram", label: "Instagram" },
 
-const inAppBrowserLabel = detectInAppBrowser();
-if (inAppBrowserLabel) {
-  showInAppBrowserWarning(inAppBrowserLabel);
+        { key: "Line/", label: "Line" },
+
+        { key: "MicroMessenger", label: "Zalo/WeChat" },
+
+        { key: "TikTok|musical_ly|BytedanceWebview", label: "TikTok" }
+
+    ];
+
+    for (const p of patterns) {
+
+        if (new RegExp(p.key, "i").test(ua))
+            return p.label;
+
+    }
+
+    const isIOS =
+        /iP(hone|od|ad)/.test(ua);
+
+    if (
+        isIOS &&
+        !/Safari/.test(ua) &&
+        /AppleWebKit/.test(ua)
+    ) {
+
+        return "ứng dụng khác";
+
+    }
+
+    return null;
+
 }
 
 
 // =========================
-// ĐĂNG NHẬP GOOGLE
+// HIỂN THỊ CẢNH BÁO
+// =========================
+
+function showInAppBrowserWarning(appLabel) {
+
+    if (!loginSection)
+        return;
+
+    if (document.getElementById("iab-warning"))
+        return;
+
+    const box =
+        loginSection.querySelector(".login-box");
+
+    if (!box)
+        return;
+
+    const warning =
+        document.createElement("div");
+
+    warning.id = "iab-warning";
+
+    warning.style.cssText =
+        "margin-top:16px;padding:14px;border-radius:10px;background:#fdecea;" +
+        "border:1px solid #f5c6cb;color:#922b21;font-size:13px;line-height:1.5;text-align:left;";
+
+    warning.innerHTML =
+        `⚠️ Bạn đang mở website trong <b>${appLabel}</b>.<br><br>` +
+        `Google không hỗ trợ đăng nhập trong trình duyệt tích hợp của ứng dụng này.<br><br>` +
+        `Hãy chọn <b>Mở bằng trình duyệt</b> rồi sử dụng Chrome hoặc Safari.`;
+
+    box.appendChild(warning);
+
+    if (loginBtn) {
+
+        loginBtn.disabled = true;
+
+        loginBtn.style.opacity = "0.5";
+
+        loginBtn.style.cursor = "not-allowed";
+
+    }
+
+}
+
+const inAppBrowserLabel =
+detectInAppBrowser();
+
+if (inAppBrowserLabel) {
+
+    showInAppBrowserWarning(
+        inAppBrowserLabel
+    );
+
+}
+
+
+// =========================
+// ĐĂNG NHẬP
 // =========================
 
 if (loginBtn) {
 
-    loginBtn.addEventListener("click", async () => {
+    loginBtn.addEventListener(
+        "click",
+        async () => {
 
-        if (inAppBrowserLabel) {
-            alert(
-                `Không thể đăng nhập Google trong ${inAppBrowserLabel}.\n\n` +
-                `Vui lòng mở link này bằng Chrome hoặc Safari (bấm "⋮"/"•••" rồi chọn "Mở bằng trình duyệt").`
-            );
-            return;
-        }
+            if (loggingIn)
+                return;
 
-        try {
+            if (inAppBrowserLabel) {
 
-            await signInWithPopup(auth, provider);
-
-        } catch (error) {
-
-            console.error(error);
-
-            const msg = String(error && (error.message || error.code) || "");
-
-            if (/missing.?initial.?state/i.test(msg) || /storage.?partition/i.test(msg)) {
                 alert(
-                    "Không thể đăng nhập do trình duyệt hiện tại chặn bộ nhớ tạm (sessionStorage).\n\n" +
-                    "Đây thường xảy ra khi mở link từ Messenger, Facebook, Instagram, Zalo... " +
-                    "Vui lòng mở link này bằng Chrome hoặc Safari rồi thử lại."
+                    `Không thể đăng nhập Google trong ${inAppBrowserLabel}.\n\n` +
+                    `Hãy mở website bằng Chrome hoặc Safari.`
                 );
-            } else if (error && error.code === "auth/popup-blocked") {
-                alert("Trình duyệt đã chặn cửa sổ đăng nhập. Vui lòng cho phép popup rồi thử lại.");
-            } else if (error && error.code === "auth/cancelled-popup-request") {
-                // Người dùng bấm nút nhiều lần / mở popup khác trước đó — bỏ qua, không cần alert.
-            } else if (error && error.code === "auth/popup-closed-by-user") {
-                // Người dùng tự đóng popup — không cần alert.
-            } else {
-                alert("Đăng nhập thất bại! Vui lòng thử lại hoặc dùng trình duyệt Chrome/Safari.");
+
+                return;
+
+            }
+
+            loggingIn = true;
+
+            loginBtn.disabled = true;
+
+            try {
+
+                await signInWithPopup(
+                    auth,
+                    provider
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                const msg =
+                    String(
+                        error?.message ||
+                        error?.code ||
+                        ""
+                    );
+
+                if (
+                    /missing.?initial.?state/i.test(msg)
+                ) {
+
+                    alert(
+                        "Không thể hoàn tất đăng nhập.\n\nNếu bạn đang dùng iPhone, hãy thử Safari."
+                    );
+
+                }
+
+                else if (
+                    /storage.?partition/i.test(msg)
+                ) {
+
+                    alert(
+                        "Trình duyệt hiện tại đang chặn bộ nhớ tạm."
+                    );
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/popup-blocked"
+                ) {
+
+                    alert(
+                        "Popup đã bị trình duyệt chặn."
+                    );
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/popup-closed-by-user"
+                ) {
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/cancelled-popup-request"
+                ) {
+
+                }
+
+                else {
+
+                    alert(
+                        "Đăng nhập thất bại.\n\nVui lòng thử lại."
+                    );
+
+                }
+
+            }
+
+            finally {
+
+                loggingIn = false;
+
+                loginBtn.disabled = false;
+
             }
 
         }
 
-    });
+    );
 
 }
 
 
-
 // =========================
-// FIREBASE TỰ KIỂM TRA
+// FIREBASE
 // =========================
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
 
-    if (!user) {
+    auth,
 
-        if (loginSection) loginSection.style.display = "block";
+    async (user) => {
 
-        if (dashboardSection) dashboardSection.style.display = "none";
+        if (!user) {
 
-        if (appContent) appContent.style.display = "none";
+            verifiedEmail = null;
 
-        // Xóa quyền khi đăng xuất
-        window.registeredLevels = [];
+            window.registeredLevels = [];
 
-        return;
+            if (loginSection)
+                loginSection.style.display = "block";
+
+            if (dashboardSection)
+                dashboardSection.style.display = "none";
+
+            if (appContent)
+                appContent.style.display = "none";
+
+            return;
+
+        }
+
+        updateUser(user);
+
+        if (
+            verifiedEmail === user.email
+        ) {
+
+            return;
+
+        }
+
+        verifiedEmail = user.email;
+
+        await verifyStudent(user.email);
 
     }
 
-    updateUser(user);
-
-    await verifyStudent(user.email);
-
-});
-
-
-
-
+);
 // =========================
 // KIỂM TRA GOOGLE SHEET
 // =========================
@@ -173,16 +321,25 @@ async function verifyStudent(email) {
     try {
 
         const response = await fetch(
-            `${GOOGLE_SHEET_API}?email=${encodeURIComponent(email)}`
+            `${GOOGLE_SHEET_API}?email=${encodeURIComponent(email)}`,
+            {
+                method: "GET",
+                cache: "no-store"
+            }
         );
+
+        if (!response.ok) {
+
+            throw new Error("HTTP " + response.status);
+
+        }
 
         const data = await response.json();
 
-        console.log(data);
+        console.log("Google Sheet:", data);
 
         if (data.status === "APPROVED") {
 
-            // Lưu danh sách HSK được phép học
             window.registeredLevels = data.levels || [];
 
             if (loginSection)
@@ -194,13 +351,13 @@ async function verifyStudent(email) {
             if (appContent)
                 appContent.style.display = "none";
 
+            return;
+
         }
 
-        else if (data.status === "PENDING") {
+        if (data.status === "PENDING") {
 
-            alert("Tài khoản đang chờ duyệt.");
-
-            await signOut(auth);
+            alert("Tài khoản của bạn đang chờ quản trị viên phê duyệt.");
 
         }
 
@@ -208,22 +365,39 @@ async function verifyStudent(email) {
 
             alert("Bạn chưa được cấp quyền sử dụng website.");
 
-            await signOut(auth);
-
         }
+
+        verifiedEmail = null;
+
+        await signOut(auth);
 
     }
 
     catch (error) {
 
-        console.error(error);
+        console.error("Google Sheet Error:", error);
 
-        alert("Không kết nối được Google Sheet.");
+        verifiedEmail = null;
+
+        alert(
+            "Không thể kết nối tới hệ thống kiểm tra tài khoản.\n\nVui lòng thử lại sau."
+        );
+
+        try {
+
+            await signOut(auth);
+
+        }
+
+        catch (e) {
+
+            console.error(e);
+
+        }
 
     }
 
 }
-
 
 
 // =========================
@@ -232,35 +406,75 @@ async function verifyStudent(email) {
 
 if (logoutBtn) {
 
-    logoutBtn.addEventListener("click", async () => {
+    logoutBtn.addEventListener(
 
-        await signOut(auth);
+        "click",
 
-    });
+        async () => {
+
+            try {
+
+                verifiedEmail = null;
+
+                window.registeredLevels = [];
+
+                await signOut(auth);
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                alert("Đăng xuất không thành công.");
+
+            }
+
+        }
+
+    );
 
 }
 
 
 
 // =========================
-// HIỂN THỊ THÔNG TIN
+// HIỂN THỊ THÔNG TIN NGƯỜI DÙNG
 // =========================
 
 function updateUser(user) {
 
-    const userName = document.getElementById("user-name");
+    const userName =
+        document.getElementById("user-name");
 
-    const userEmail = document.getElementById("user-email");
+    const userEmail =
+        document.getElementById("user-email");
 
-    const userAvatar = document.getElementById("user-avatar");
+    const userAvatar =
+        document.getElementById("user-avatar");
 
-    if (userName)
-        userName.textContent = user.displayName;
 
-    if (userEmail)
-        userEmail.textContent = user.email;
+    if (userName) {
 
-    if (userAvatar && user.photoURL)
-        userAvatar.src = user.photoURL;
+        userName.textContent =
+            user.displayName || "";
+
+    }
+
+
+    if (userEmail) {
+
+        userEmail.textContent =
+            user.email || "";
+
+    }
+
+
+    if (userAvatar && user.photoURL) {
+
+        userAvatar.src =
+            user.photoURL;
+
+    }
 
 }
